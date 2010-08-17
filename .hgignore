@@ -1,0 +1,8 @@
+syntax: glob
+prcs2hg
+Makefile
+config.status
+config.cache
+config.log
+
+*~
