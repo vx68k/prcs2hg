@@ -26,5 +26,6 @@
 import prcs
 import hglib
 
-def convert():
+def convert(name):
     """convert revisions."""
+    proj = prcs.Project(name)
