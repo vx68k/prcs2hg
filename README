@@ -1,0 +1,7 @@
+This directory contains the source code for prcs2hg, which is a command that
+converts PRCS revisions to Mercurial changesets.
+
+This program is free software.
+
+See our wiki <https://bitbucket.org/kazssym/prcs2hg/wiki> for more
+information.
