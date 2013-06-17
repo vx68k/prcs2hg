@@ -23,9 +23,34 @@
 """provide command line interface to PRCS
 """
 
+import re
+from time import mktime
+from email.utils import parsedate
+from subprocess import Popen, PIPE
 import sexpdata
 
 class Project(object):
+
     def __init__(self, name):
         """construct a Project object."""
         self.name = name
+
+    def revisions(self):
+        out, err = self._run_prcs(["info", "-f", self.name]);
+
+        revisions = {}
+        if (not err):
+            for line in out.splitlines():
+                m = re.match("[^ ]+ ([^ ]+) (.*) by ([^ ]+)", line)
+                revisions[m.group(1)] = {
+                    "date": mktime(parsedate(m.group(2))),
+                    "user": m.group(3)
+                }
+        else:
+            sys.stderr.write(err)
+        return revisions
+
+    def _run_prcs(self, args, input = None):
+        """run a PRCS subprocess."""
+        prcs = Popen(["prcs"] + args, stdin = PIPE, stdout = PIPE, stderr = PIPE)
+        return prcs.communicate(input)
