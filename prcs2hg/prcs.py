@@ -52,5 +52,6 @@ class Project(object):
 
     def _run_prcs(self, args, input = None):
         """run a PRCS subprocess."""
-        prcs = Popen(["prcs"] + args, stdin = PIPE, stdout = PIPE, stderr = PIPE)
+        prcs = Popen(["prcs"] + args, stdin = PIPE, stdout = PIPE,
+                stderr = PIPE)
         return prcs.communicate(input)
