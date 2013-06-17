@@ -41,7 +41,7 @@ class Project(object):
         revisions = {}
         if (not err):
             for line in out.splitlines():
-                m = re.match("[^ ]+ ([^ ]+) (.*) by ([^ ]+)", line)
+                m = re.match("^[^ ]+ ([^ ]+) (.+) by (.+)", line)
                 revisions[m.group(1)] = {
                     "date": mktime(parsedate(m.group(2))),
                     "user": m.group(3)
