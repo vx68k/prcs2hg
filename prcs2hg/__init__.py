@@ -28,7 +28,7 @@ import hglib
 
 def convert(name):
     """convert revisions."""
-    project = prcs.Project(name)
+    project = prcs.PrcsProject(name)
     revisions = project.revisions()
     # Debug print
     print(revisions)

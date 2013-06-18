@@ -29,7 +29,7 @@ from email.utils import parsedate
 from subprocess import Popen, PIPE
 import sexpdata
 
-class Project(object):
+class PrcsProject(object):
 
     def __init__(self, name):
         """construct a Project object."""
