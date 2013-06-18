@@ -23,10 +23,10 @@
 """provide command line interface to PRCS
 """
 
-import re
+import sys, re, subprocess, time, email.utils
+from subprocess import Popen, PIPE
 from time import mktime
 from email.utils import parsedate
-from subprocess import Popen, PIPE
 import sexpdata
 
 class PrcsProject(object):
@@ -34,18 +34,26 @@ class PrcsProject(object):
     def __init__(self, name):
         """construct a Project object."""
         self.name = name
+        self.info_re = re.compile(
+                "^([^ ]+) ([^ ]+) (.+) by ([^ ]+)( \*DELETED\*|)")
 
     def revisions(self):
         out, err = self._run_prcs(["info", "-f", self.name]);
 
         revisions = {}
         if (not err):
+            # We use iteration over lines so that we can detect parse errors.
             for line in out.splitlines():
-                m = re.match("^[^ ]+ ([^ ]+) (.+) by (.+)", line)
-                revisions[m.group(1)] = {
-                    "date": mktime(parsedate(m.group(2))),
-                    "user": m.group(3)
-                }
+                m = self.info_re.search(line)
+                if (m):
+                    revisions[m.group(2)] = {
+                        "project": m.group(1),
+                        "revision": m.group(2),
+                        # The prcs info command returns the local time.
+                        "date": mktime(parsedate(m.group(3))),
+                        "author": m.group(4),
+                        "deleted": bool(m.group(5))
+                    }
         else:
             sys.stderr.write(err)
         return revisions
