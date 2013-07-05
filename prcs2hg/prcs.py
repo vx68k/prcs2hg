@@ -58,6 +58,16 @@ class PrcsProject(object):
             sys.stderr.write(err)
         return revisions
 
+    def checkout(self, files = None, revision = None):
+        flags = []
+        if revision:
+            flags = flags + ["-r", revision]
+
+        out, err = self._run_prcs(["checkout", "-fqu"] + flags + [self.name]
+                + (files or []))
+        if err:
+            sys.stderr.write(err)
+
     def _run_prcs(self, args, input = None):
         """run a PRCS subprocess."""
         prcs = Popen(["prcs"] + args, stdin = PIPE, stdout = PIPE,
