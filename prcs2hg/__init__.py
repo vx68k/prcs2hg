@@ -23,12 +23,18 @@
 """convert PRCS revisions to Mercurial changesets
 """
 
-import prcs
+import sys
 import hglib
+import prcs2hg.prcs
+from prcs2hg.prcs import PrcsProject
 
-def convert(name):
+def convert(name, verbose = False):
     """convert revisions."""
-    project = prcs.PrcsProject(name)
+    project = PrcsProject(name)
     revisions = project.revisions()
-    # Debug print
-    print(revisions)
+
+    for r in revisions.itervalues():
+        if 'deleted' not in r or not r['deleted']:
+            project.checkout([name + ".prj"], revision = r['revision'])
+        else:
+            sys.stderr.write(r['revision'] + " was deleted\n")
