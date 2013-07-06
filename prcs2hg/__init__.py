@@ -25,6 +25,7 @@
 
 import sys
 import hglib
+import sexpdata
 import prcs2hg.prcs
 from prcs2hg.prcs import PrcsProject
 
@@ -33,9 +34,26 @@ def convert(name, verbose = False):
     project = PrcsProject(name)
     revisions = project.revisions()
 
+    if verbose:
+        sys.stderr.write("Extracting project descriptors...\n");
     for r in revisions.itervalues():
+        d = {}
         if not r.get('deleted', False):
-            project.checkout([name + ".prj"], revision = r['revision'])
+            fname = project.name + ".prj"
+            project.checkout([fname], revision = r['revision'])
+            d = _parsedescriptor(fname)
         else:
             sys.stderr.write("warning: revision " + r['revision']
                     + " was deleted\n")
+        r['descriptor'] = d
+
+def _parsedescriptor(name):
+    with open(name, "r") as f:
+        string = f.read()
+
+    d = {}
+    # Encloses the project descriptor in a single list.
+    for i in sexpdata.loads("(\n" + string + "\n)\n"):
+        if isinstance(i, list) and isinstance(i[0], sexpdata.Symbol):
+            d[i[0].value().lower()] = i[1:]
+    return d
