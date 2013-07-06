@@ -34,7 +34,8 @@ def convert(name, verbose = False):
     revisions = project.revisions()
 
     for r in revisions.itervalues():
-        if 'deleted' not in r or not r['deleted']:
+        if not r.get('deleted', False):
             project.checkout([name + ".prj"], revision = r['revision'])
         else:
-            sys.stderr.write(r['revision'] + " was deleted\n")
+            sys.stderr.write("warning: revision " + r['revision']
+                    + " was deleted\n")
