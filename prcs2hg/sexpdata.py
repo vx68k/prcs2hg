@@ -606,10 +606,7 @@ class Parser(object):
         try:
             return int(token)
         except ValueError:
-            try:
-                return float(token)
-            except ValueError:
-                return Symbol(token)
+            return Symbol(token)
 
     def parse_sexp(self, i):
         string = self.string
