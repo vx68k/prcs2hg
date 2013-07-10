@@ -25,8 +25,7 @@
 
 import sys
 import hglib
-import prcs2hg.prcs
-from prcs2hg import sexpdata
+import prcs2hg.sexpdata as sexpdata
 from prcs2hg.prcs import PrcsProject
 
 def convert(name, verbose = False):
