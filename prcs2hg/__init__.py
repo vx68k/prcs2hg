@@ -36,15 +36,20 @@ def convert(name, verbose = False):
     if verbose:
         sys.stderr.write("Extracting project descriptors...\n");
     for r in revisions.itervalues():
-        d = {}
         if not r.get('deleted', False):
             fname = project.name + ".prj"
             project.checkout([fname], revision = r['revision'])
-            d = _parsedescriptor(fname)
+            r['descriptor'] = _parsedescriptor(fname)
         else:
             sys.stderr.write("warning: revision " + r['revision']
                     + " was deleted\n")
-        r['descriptor'] = d
+
+    roots = filter(_isroot, revisions.itervalues())
+    if len(roots) != 1:
+        sys.stderr.write("Not a single root\n")
+        return False
+    # TODO
+    print "root revision is", roots[0]['revision']
 
 def _parsedescriptor(name):
     with open(name, "r") as f:
@@ -56,3 +61,12 @@ def _parsedescriptor(name):
         if isinstance(i, list) and isinstance(i[0], sexpdata.Symbol):
             d[i[0].value().lower()] = i[1:]
     return d
+
+def _isroot(revision):
+    """return a true value if a revision is root."""
+    if 'descriptor' in revision:
+        p = revision['descriptor']['parent-version']
+        return isinstance(p[0], sexpdata.Symbol) and p[0].value() == "-*-"
+    else:
+        return False
+
