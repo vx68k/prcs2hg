@@ -603,10 +603,7 @@ class Parser(object):
             return True
         if token == self.false:
             return False
-        try:
-            return int(token)
-        except ValueError:
-            return Symbol(token)
+        return Symbol(token)
 
     def parse_sexp(self, i):
         string = self.string
