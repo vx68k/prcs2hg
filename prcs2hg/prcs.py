@@ -61,7 +61,7 @@ class PrcsProject(object):
     def checkout(self, files = None, revision = None):
         flags = ["-fqu"]
         if files is None:
-            file = []
+            files = []
         if revision is not None:
             flags.extend(["-r", revision])
         out, err = self._run_prcs(["checkout"] + flags + [self.name] + files)
