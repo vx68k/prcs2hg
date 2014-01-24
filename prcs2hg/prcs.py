@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2012-2013  Kaz Nishimura
+# Copyright (C) 2012-2014 Kaz Nishimura
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to
