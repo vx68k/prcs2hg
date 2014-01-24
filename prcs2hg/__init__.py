@@ -38,10 +38,10 @@ def convert(name, verbose = False):
     for r in revisions.itervalues():
         if not r.get('deleted', False):
             fname = project.name + ".prj"
-            project.checkout([fname], revision = r['revision'])
+            project.checkout([fname], revision = r["id"])
             r['descriptor'] = _parsedescriptor(fname)
         else:
-            sys.stderr.write("warning: revision " + r['revision']
+            sys.stderr.write("warning: revision " + r["id"]
                     + " was deleted\n")
 
     roots = filter(_isroot, revisions.itervalues())
@@ -49,7 +49,7 @@ def convert(name, verbose = False):
         sys.stderr.write("Not a single root\n")
         return False
     # TODO
-    print "root revision is", roots[0]['revision']
+    print "root revision is", roots[0]["id"]
 
 def _parsedescriptor(name):
     with open(name, "r") as f:

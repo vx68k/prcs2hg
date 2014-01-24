@@ -48,7 +48,7 @@ class PrcsProject(object):
                 if (m):
                     revisions[m.group(2)] = {
                         "project": m.group(1),
-                        "revision": m.group(2),
+                        "id": m.group(2),
                         # The prcs info command returns the local time.
                         "date": mktime(parsedate(m.group(3))),
                         "author": m.group(4),
