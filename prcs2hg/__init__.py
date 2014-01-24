@@ -32,17 +32,17 @@ def convert(name, verbose = False):
     """convert revisions."""
     project = PrcsProject(name)
     revisions = project.revisions()
+    list = sorted(revisions, key = lambda id: revisions[id]["date"])
 
     if verbose:
         sys.stderr.write("Extracting project descriptors...\n");
-    for r in revisions.itervalues():
-        if not r.get('deleted', False):
+    for i in list:
+        if not revisions[i].get("deleted", False):
             fname = project.name + ".prj"
-            project.checkout([fname], revision = r["id"])
-            r['descriptor'] = _parsedescriptor(fname)
+            project.checkout([fname], revision = i)
+            revisions[i]["descriptor"] = _parsedescriptor(fname)
         else:
-            sys.stderr.write("warning: revision " + r["id"]
-                    + " was deleted\n")
+            sys.stderr.write("warning: revision " + i + " was deleted\n")
 
     roots = filter(_isroot, revisions.itervalues())
     if len(roots) != 1:
