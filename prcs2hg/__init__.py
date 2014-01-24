@@ -38,9 +38,9 @@ def convert(name, verbose = False):
         sys.stderr.write("Extracting project descriptors...\n");
     for i in list:
         if not revisions[i].get("deleted", False):
-            fname = project.name + ".prj"
-            project.checkout([fname], revision = i)
-            revisions[i]["descriptor"] = _parsedescriptor(fname)
+            prj_name = project.name + ".prj"
+            project.checkout([prj_name], revision = i)
+            revisions[i]["descriptor"] = _parsedescriptor(prj_name)
         else:
             sys.stderr.write("warning: revision " + i + " was deleted\n")
 
