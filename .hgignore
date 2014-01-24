@@ -5,4 +5,11 @@ syntax: regexp
 ^build/
 ^dist/
 \.pyc$
+
+# Backup and garbage files
 ~$
+\.orig$
+\.rej$
+
+# Local project files
+^nbproject/
