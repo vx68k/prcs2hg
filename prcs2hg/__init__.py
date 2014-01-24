@@ -28,6 +28,20 @@ import hglib
 import prcs2hg.sexpdata as sexpdata
 from prcs2hg.prcs import PrcsProject
 
+class Converter(object):
+
+    def __init__(self, name, verbose = False):
+        """Construct a Converter object."""
+        self.name = name
+        self.verbose = verbose
+
+        self.project = PrcsProject(name)
+        revisions = self.project.revisions()
+
+    def convert(self):
+        """Convert all revisions."""
+        list = sorted(revisions, key = lambda id: revisions[id]["date"])
+
 def convert(name, verbose = False):
     """convert revisions."""
     project = PrcsProject(name)
