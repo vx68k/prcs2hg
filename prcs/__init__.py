@@ -27,7 +27,7 @@ import sys, re, subprocess, time, email.utils
 from subprocess import Popen, PIPE
 from time import mktime
 from email.utils import parsedate
-import sexpdata
+import prcs.sexpdata as sexpdata
 
 class PrcsProject(object):
 
@@ -68,8 +68,24 @@ class PrcsProject(object):
         if err:
             sys.stderr.write(err)
 
+    def descriptor(self, revision = None):
+        prj_name = self.name + ".prj"
+        self.checkout([prj_name], revision)
+        return _readdescriptor(prj_name)
+
     def _run_prcs(self, args, input = None):
         """run a PRCS subprocess."""
         prcs = Popen(["prcs"] + args, stdin = PIPE, stdout = PIPE,
                 stderr = PIPE)
         return prcs.communicate(input)
+
+def _readdescriptor(name):
+    with open(name, "r") as f:
+        string = f.read()
+
+    descriptor = {}
+    # Encloses the project descriptor in a single list.
+    for i in sexpdata.loads("(\n" + string + "\n)"):
+        if isinstance(i, list) and isinstance(i[0], sexpdata.Symbol):
+            descriptor[i[0].value()] = i[1:]
+    return descriptor
