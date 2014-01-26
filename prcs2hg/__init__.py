@@ -25,7 +25,7 @@
 
 import sys
 import hglib
-import prcs2hg.sexpdata as sexpdata
+import prcs.sexpdata as sexpdata
 from prcs import PrcsProject
 
 class Converter(object):
@@ -52,9 +52,7 @@ def convert(name, verbose = False):
         sys.stderr.write("Extracting project descriptors...\n");
     for i in list:
         if not revisions[i].get("deleted", False):
-            prj_name = project.name + ".prj"
-            project.checkout([prj_name], revision = i)
-            revisions[i]["descriptor"] = _parsedescriptor(prj_name)
+            revisions[i]["descriptor"] = project.descriptor(i)
         else:
             sys.stderr.write("warning: revision " + i + " was deleted\n")
 
@@ -65,21 +63,10 @@ def convert(name, verbose = False):
     # TODO
     print "root revision is", roots[0]["id"]
 
-def _parsedescriptor(name):
-    with open(name, "r") as f:
-        string = f.read()
-
-    d = {}
-    # Encloses the project descriptor in a single list.
-    for i in sexpdata.loads("(\n" + string + "\n)\n"):
-        if isinstance(i, list) and isinstance(i[0], sexpdata.Symbol):
-            d[i[0].value().lower()] = i[1:]
-    return d
-
 def _isroot(revision):
     """return a true value if a revision is root."""
     if 'descriptor' in revision:
-        p = revision['descriptor']['parent-version']
+        p = revision['descriptor']['Parent-Version']
         return isinstance(p[0], sexpdata.Symbol) and p[0].value() == "-*-"
     else:
         return False
