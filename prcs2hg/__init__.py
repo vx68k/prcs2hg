@@ -44,13 +44,14 @@ class Converter(object):
 
         for i in list:
             if self.verbose:
-                sys.stderr.write("Converting revision " + i)
+                sys.stderr.write("Converting revision {0}\n".format(i))
 
             if not revisions[i].get("deleted", False):
                 # TODO: Rewrite.
                 revisions[i]["descriptor"] = project.descriptor(i)
             else:
-                sys.stderr.write("warning: revision " + i + " was deleted\n")
+                sys.stderr.write("warning: revision {0} was deleted\n"
+                    .format(i))
 
         # TODO: Refactor this section.
         roots = filter(_isroot, revisions.itervalues())
