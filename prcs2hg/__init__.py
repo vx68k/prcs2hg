@@ -35,33 +35,35 @@ class Converter(object):
         self.name = name
         self.verbose = verbose
 
-        self.project = PrcsProject(name)
-        revisions = self.project.revisions()
-
     def convert(self):
         """Convert all revisions."""
-        list = sorted(revisions, key = lambda id: revisions[id]["date"])
+        project = PrcsProject(self.name)
+        revisions = project.revisions()
+        list = sorted(revisions, key = lambda id:
+            revisions[id]["date"])
+
+        for i in list:
+            if self.verbose:
+                sys.stderr.write("Converting revision " + i)
+
+            if not revisions[i].get("deleted", False):
+                # TODO: Rewrite.
+                revisions[i]["descriptor"] = project.descriptor(i)
+            else:
+                sys.stderr.write("warning: revision " + i + " was deleted\n")
+
+        # TODO: Refactor this section.
+        roots = filter(_isroot, revisions.itervalues())
+        if len(roots) != 1:
+            sys.stderr.write("Not a single root\n")
+            return False
+        # TODO
+        print "root revision is", roots[0]["id"]
 
 def convert(name, verbose = False):
     """convert revisions."""
-    project = PrcsProject(name)
-    revisions = project.revisions()
-    list = sorted(revisions, key = lambda id: revisions[id]["date"])
-
-    if verbose:
-        sys.stderr.write("Extracting project descriptors...\n");
-    for i in list:
-        if not revisions[i].get("deleted", False):
-            revisions[i]["descriptor"] = project.descriptor(i)
-        else:
-            sys.stderr.write("warning: revision " + i + " was deleted\n")
-
-    roots = filter(_isroot, revisions.itervalues())
-    if len(roots) != 1:
-        sys.stderr.write("Not a single root\n")
-        return False
-    # TODO
-    print "root revision is", roots[0]["id"]
+    converter = Converter(name, verbose = verbose)
+    converter.convert()
 
 def _isroot(revision):
     """return a true value if a revision is root."""
