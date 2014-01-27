@@ -23,7 +23,7 @@
 """provide command line interface to PRCS
 """
 
-import sys, re, subprocess, time, email.utils
+import sys, re, os, subprocess, time, email.utils
 from subprocess import Popen, PIPE
 from time import mktime
 from email.utils import parsedate
@@ -68,16 +68,33 @@ class PrcsProject(object):
         if err:
             sys.stderr.write(err)
 
-    def descriptor(self, revision = None):
-        prj_name = self.name + ".prj"
-        self.checkout([prj_name], revision)
-        return _readdescriptor(prj_name)
+    def descriptor(self, id = None):
+        return PrcsDescriptor(self, id)
 
     def _run_prcs(self, args, input = None):
         """run a PRCS subprocess."""
         prcs = Popen(["prcs"] + args, stdin = PIPE, stdout = PIPE,
                 stderr = PIPE)
         return prcs.communicate(input)
+
+class PrcsDescriptor(object):
+
+    def __init__(self, project, id = None):
+        prj_name = project.name + ".prj"
+        project.checkout([prj_name], id)
+        self.properties = _readdescriptor(prj_name)
+        os.unlink(prj_name)
+
+    def parent(self):
+        pv = self.properties["Parent-Version"]
+        if len(pv) >= 3:
+            if pv[1].value() != "-*-" and pv[2].value() != "-*-":
+                return "{0}.{1}".format(pv[1].value(), pv[2].value())
+            else:
+                return None
+        else:
+            sys.stderr.write("Failed to get the parent for {0}\n".format(id))
+            return None
 
 def _readdescriptor(name):
     with open(name, "r") as f:

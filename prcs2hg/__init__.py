@@ -38,6 +38,8 @@ class Converter(object):
         self.project = PrcsProject(self.name)
         self.revisions = self.project.revisions()
 
+        self.hgclient = hglib.open(".")
+
     def convert(self):
         """Convert all revisions in a project."""
         list = sorted(self.revisions, key = lambda id:
@@ -58,6 +60,12 @@ class Converter(object):
                 sys.stderr.write("Converting revision {0}\n".format(id))
             # TODO: Rewrite.
             descriptor = self.project.descriptor(id)
+            parent = descriptor.parent()
+            if parent is not None:
+                # TODO: If the parent is not converted, do it here.
+                print
+            else:
+                self.hgclient.update("null")
         else:
             sys.stderr.write("warning: revision {0} was deleted\n".format(id))
 
