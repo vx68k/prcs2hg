@@ -63,7 +63,7 @@ class Converter(object):
             parent = descriptor.parent()
             if parent is not None:
                 # TODO: If the parent is not converted, do it here.
-                print
+                pass
             else:
                 self.hgclient.update("null")
         else:
