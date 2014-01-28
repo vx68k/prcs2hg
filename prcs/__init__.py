@@ -63,7 +63,7 @@ class PrcsProject(object):
 
     def checkout(self, revision = None, *files):
         args = ["checkout", "-fqu"]
-        if files == []:
+        if not files:
             args.append("-P")
         if revision is not None:
             args.extend(["-r", revision])
