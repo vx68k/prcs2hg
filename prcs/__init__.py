@@ -58,18 +58,20 @@ class PrcsProject(object):
             sys.stderr.write(err)
         return revisions
 
-    def checkout(self, files = None, revision = None):
-        flags = ["-fqu"]
-        if files is None:
-            files = []
-        if revision is not None:
-            flags.extend(["-r", revision])
-        out, err = self._run_prcs(["checkout"] + flags + [self.name] + files)
-        if err:
-            sys.stderr.write(err)
-
     def descriptor(self, id = None):
         return PrcsDescriptor(self, id)
+
+    def checkout(self, revision = None, *files):
+        args = ["checkout", "-fqu"]
+        if files == []:
+            args.append("-P")
+        if revision is not None:
+            args.extend(["-r", revision])
+        args.append(self.name)
+        args.extend(files)
+        out, err = self._run_prcs(args)
+        if err:
+            sys.stderr.write(err)
 
     def _run_prcs(self, args, input = None):
         """run a PRCS subprocess."""
@@ -81,7 +83,7 @@ class PrcsDescriptor(object):
 
     def __init__(self, project, id = None):
         prj_name = project.name + ".prj"
-        project.checkout([prj_name], id)
+        project.checkout(id, prj_name)
         self.properties = _readdescriptor(prj_name)
         os.unlink(prj_name)
 
