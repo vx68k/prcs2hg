@@ -98,6 +98,27 @@ class PrcsDescriptor(object):
             sys.stderr.write("Failed to get the parent for {0}\n".format(id))
             return None
 
+    def files(self):
+        """Return the file information as a dictionary."""
+        files = {}
+        for i in self.properties["Files"]:
+            name = i[0].value()
+            symlink = False
+            for j in i[2:]:
+                if j.value() == ":symlink":
+                    symlink = True
+            if symlink:
+                files[name] = {
+                    "symlink": i[1][0].value(),
+                }
+            else:
+                files[name] = {
+                    "id": i[1][0].value(),
+                    "revision": i[1][1].value(),
+                    "mode": int(i[1][2].value(), 8),
+                }
+        return files
+
 def _readdescriptor(name):
     with open(name, "r") as f:
         string = f.read()
