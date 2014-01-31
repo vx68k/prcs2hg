@@ -52,16 +52,15 @@ class Converter(object):
         for i in list:
             self.convertrevision(i)
 
-    def convertrevision(self, id):
-        revision = self.revisions[id]
-        if revision.get("deleted", False):
-            sys.stderr.write("Ignored deleted version {0}\n".format(id))
+    def convertrevision(self, version):
+        if self.revisions[version].get("deleted"):
+            sys.stderr.write("Ignored deleted version {0}\n".format(version))
             return
 
         if self.verbose:
-            sys.stderr.write("Converting version {0}\n".format(id))
+            sys.stderr.write("Converting version {0}\n".format(version))
 
-        descriptor = self.project.descriptor(id)
+        descriptor = self.project.descriptor(version)
         parent = descriptor.parentversion()
         if parent[0] is None:
             # It is a root revision.
@@ -74,6 +73,10 @@ class Converter(object):
                 # TODO: If the parent is not converted, do it here.
                 sys.exit("Parent revision {0} not converted"
                     .format(parent))
+
+            mergeparents = descriptor.mergeparents()
+            if mergeparents:
+                sys.exit("Merge found")
 
             # Makes the working directory clean.
             self.hgclient.update(self.revisionmap[parent])
@@ -88,10 +91,10 @@ class Converter(object):
                 parent_descriptor = self.project.descriptor(parent)
                 parent_filemap = _makefilemap(parent_descriptor.files())
 
-        self.project.checkout(id)
+        self.project.checkout(version)
         files = descriptor.files()
         filemap = _makefilemap(files)
-        revision["filemap"] = filemap
+        self.revisions[version]["filemap"] = filemap
 
         # Checks for files.
         addlist = []
@@ -130,12 +133,12 @@ class Converter(object):
         if not message:
             message = "(empty commit message)"
         revision = self.hgclient.commit(message = message,
-            date = self.revisions[id]["date"],
-            user = self.revisions[id]["author"])
+            date = self.revisions[version]["date"],
+            user = self.revisions[version]["author"])
 
-        self.revisionmap[id] = revision[1]
+        self.revisionmap[version] = revision[1]
         # Keeps the revision identifier as a local tag for convenience.
-        self.hgclient.tag([id], local = True, force = True)
+        self.hgclient.tag([version], local = True, force = True)
 
 def _makefilemap(files):
     filemap = {}
@@ -152,4 +155,3 @@ def convert(name, verbose = False):
     """convert revisions."""
     converter = Converter(name, verbose = verbose)
     converter.convert()
-
