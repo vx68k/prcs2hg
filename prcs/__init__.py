@@ -88,6 +88,11 @@ class PrcsDescriptor(object):
         self.properties = _readdescriptor(prj_name)
         os.unlink(prj_name)
 
+    def version(self):
+        """Return the major and minor versions."""
+        v = self.properties["Project-Version"]
+        return v[1].value(), v[2].value()
+
     def parent(self):
         pv = self.properties["Parent-Version"]
         if len(pv) >= 3:
