@@ -27,6 +27,7 @@ import sys
 import re
 import os
 import hglib
+from string import join
 from prcs import PrcsProject
 
 class Converter(object):
@@ -61,12 +62,13 @@ class Converter(object):
             sys.stderr.write("Converting version {0}\n".format(id))
 
         descriptor = self.project.descriptor(id)
-        parent = descriptor.parent()
-        if parent is None:
+        parent = descriptor.parentversion()
+        if parent[0] is None:
             # It is a root revision.
             self.hgclient.update("null")
             parent_filemap = {}
         else:
+            parent = join(parent, ".")
             if self.revisionmap.get(parent) is None:
                 self.convertrevision(parent)
                 # TODO: If the parent is not converted, do it here.
@@ -127,10 +129,11 @@ class Converter(object):
         message = descriptor.message()
         if not message:
             message = "(empty commit message)"
-        node = self.hgclient.commit(message = message,
-            date = revision["date"], user = revision["author"])[1]
+        revision = self.hgclient.commit(message = message,
+            date = self.revisions[id]["date"],
+            user = self.revisions[id]["author"])
 
-        self.revisionmap[id] = node
+        self.revisionmap[id] = revision[1]
         # Keeps the revision identifier as a local tag for convenience.
         self.hgclient.tag([id], local = True, force = True)
 

@@ -108,12 +108,6 @@ class PrcsDescriptor(object):
             sys.exit("Merge found")
         return major, minor
 
-    def parent(self):
-        major, minor = self.parentversion()
-        if major is None:
-            return None
-        return major + "." + minor
-
     def message(self):
         """Return the log message."""
         return self.properties["Version-Log"][0]
