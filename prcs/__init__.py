@@ -103,10 +103,14 @@ class PrcsDescriptor(object):
         if v[0].value() == "-*-" and major == "-*-" and minor == "-*-":
             major = None
             minor = None
-        # TODO: Merges must be handled differently.
-        if self.properties["Merge-Parents"]:
-            sys.exit("Merge found")
         return major, minor
+
+    def mergeparents(self):
+        """Return the list of merge parents."""
+        p = []
+        for i in self.properties["Merge-Parents"]:
+            p.append(i[0].value())
+        return p
 
     def message(self):
         """Return the log message."""
