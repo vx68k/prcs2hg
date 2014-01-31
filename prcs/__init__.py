@@ -23,10 +23,12 @@
 """provide command line interface to PRCS
 """
 
-import sys, re, os, subprocess, email.utils
+import sys
+import re
+import os
 from datetime import datetime
-from subprocess import Popen, PIPE
 from email.utils import parsedate
+from subprocess import Popen, PIPE
 import prcs.sexpdata as sexpdata
 
 class PrcsProject(object):
@@ -93,16 +95,24 @@ class PrcsDescriptor(object):
         v = self.properties["Project-Version"]
         return v[1].value(), v[2].value()
 
+    def parentversion(self):
+        """Return the major and minor parent versions."""
+        v = self.properties["Parent-Version"]
+        major = v[1].value()
+        minor = v[2].value()
+        if v[0].value() == "-*-" and major == "-*-" and minor == "-*-":
+            major = None
+            minor = None
+        # TODO: Merges must be handled differently.
+        if self.properties["Merge-Parents"]:
+            sys.exit("Merge found")
+        return major, minor
+
     def parent(self):
-        pv = self.properties["Parent-Version"]
-        if len(pv) >= 3:
-            if pv[1].value() != "-*-" and pv[2].value() != "-*-":
-                return "{0}.{1}".format(pv[1].value(), pv[2].value())
-            else:
-                return None
-        else:
-            sys.stderr.write("Failed to get the parent for {0}\n".format(id))
+        major, minor = self.parentversion()
+        if major is None:
             return None
+        return major + "." + minor
 
     def message(self):
         """Return the log message."""
