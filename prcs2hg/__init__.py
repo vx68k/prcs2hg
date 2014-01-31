@@ -24,7 +24,9 @@
 """
 
 import sys
+import os
 import hglib
+import hglib.error
 import prcs.sexpdata as sexpdata
 from prcs import PrcsProject
 
@@ -34,6 +36,7 @@ class Converter(object):
         """Construct a Converter object."""
         self.name = name
         self.verbose = verbose
+        self.revisionmap = {}
 
         self.project = PrcsProject(self.name)
         self.revisions = self.project.revisions()
@@ -55,19 +58,89 @@ class Converter(object):
 #            return False
 
     def convertrevision(self, id):
-        if not self.revisions[id].get("deleted", False):
-            if self.verbose:
-                sys.stderr.write("Converting revision {0}\n".format(id))
-            # TODO: Rewrite.
-            descriptor = self.project.descriptor(id)
-            parent = descriptor.parent()
-            if parent is not None:
-                # TODO: If the parent is not converted, do it here.
-                pass
-            else:
-                self.hgclient.update("null")
+        revision = self.revisions[id]
+        if revision.get("deleted", False):
+            sys.stderr.write("Revision {0} was deleted\n".format(id))
+            return
+
+        if self.verbose:
+            sys.stderr.write("Converting revision {0}\n".format(id))
+
+        descriptor = self.project.descriptor(id)
+        parent = descriptor.parent()
+        if parent is None:
+            # It is a root revision.
+            self.hgclient.update("null")
+            parent_filemap = {}
         else:
-            sys.stderr.write("warning: revision {0} was deleted\n".format(id))
+            if self.revisionmap.get(parent) is None:
+                self.convertrevision(parent)
+                # TODO: If the parent is not converted, do it here.
+                sys.exit("Parent revision {0} not converted"
+                    .format(parent))
+
+            # Makes the working directory clean.
+            self.hgclient.update(self.revisionmap[parent])
+            for i in self.hgclient.status():
+                if i[0] != "C":
+                    os.unlink(i[1])
+            self.hgclient.revert([], "null", all = True)
+
+            parent_filemap = self.revisions[parent].get("filemap")
+            if parent_filemap is None:
+                sys.exit("No parent filemap")
+                parent_descriptor = self.project.descriptor(parent)
+                parent_filemap = _makefilemap(parent_descriptor.files())
+
+        self.project.checkout(id)
+        files = descriptor.files()
+        filemap = _makefilemap(files)
+        revision["filemap"] = filemap
+
+        # Checks for added files.
+        addlist = []
+        for name, i in files.iteritems():
+            file_id = i.get("id")
+            if file_id is None:
+                if i.get("symlink", False):
+                    sys.stderr.write("{0}: warning: symbolic link\n"
+                        .format(name))
+                else:
+                    sys.stderr.write("{0}: error: no identity\n"
+                        .format(name))
+                    sys.exit("stop")
+            else:
+                parent_name = parent_filemap.get(file_id)
+                if parent_name is not None and parent_name != name:
+                    if self.verbose:
+                        sys.stderr.write("{0}: renamed from {1}\n"
+                            .format(name, parent_name))
+                    self.hgclient.copy(parent_name, name, after = True)
+                else:
+                    addlist.append(name)
+
+        if addlist:
+            self.hgclient.add(addlist)
+        message = descriptor.message()
+        if not message:
+            message = "(empty commit message)"
+        node = self.hgclient.commit(message = message,
+            date = revision["date"], user = revision["author"])[1]
+
+        self.revisionmap[id] = node
+        # Keeps the revision identifier as a local tag for convenience.
+        self.hgclient.tag([id], local = True, force = True)
+
+def _makefilemap(files):
+    filemap = {}
+    for name, i in files.iteritems():
+        id = i.get("id")
+        if id is not None:
+            if filemap.has_key(id):
+                sys.stderr.write(
+                    "warning: Duplicate file identifier in a revision\n")
+            filemap[id] = name
+    return filemap
 
 def convert(name, verbose = False):
     """convert revisions."""
