@@ -24,6 +24,7 @@
 """
 
 import sys
+import re
 import os
 import hglib
 from prcs import PrcsProject
@@ -113,6 +114,14 @@ class Converter(object):
 
         if addlist:
             self.hgclient.add(addlist)
+
+        # Sets the branch for the following commit.
+        major, minor = descriptor.version()
+        branch = "default"
+        if not re.match("[0-9]+$", major):
+            branch = major
+        self.hgclient.branch(branch, force = True)
+
         message = descriptor.message()
         if not message:
             message = "(empty commit message)"
