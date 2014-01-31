@@ -26,8 +26,6 @@
 import sys
 import os
 import hglib
-import hglib.error
-import prcs.sexpdata as sexpdata
 from prcs import PrcsProject
 
 class Converter(object):
@@ -50,12 +48,6 @@ class Converter(object):
 
         for i in list:
             self.convertrevision(i)
-
-#        # TODO: Refactor this section.
-#        roots = filter(_isroot, revisions.itervalues())
-#        if len(roots) != 1:
-#            sys.stderr.write("Not a single root\n")
-#            return False
 
     def convertrevision(self, id):
         revision = self.revisions[id]
@@ -146,12 +138,4 @@ def convert(name, verbose = False):
     """convert revisions."""
     converter = Converter(name, verbose = verbose)
     converter.convert()
-
-def _isroot(revision):
-    """return a true value if a revision is root."""
-    if 'descriptor' in revision:
-        p = revision['descriptor']['Parent-Version']
-        return isinstance(p[0], sexpdata.Symbol) and p[0].value() == "-*-"
-    else:
-        return False
 
