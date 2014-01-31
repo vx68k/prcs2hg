@@ -54,11 +54,11 @@ class Converter(object):
     def convertrevision(self, id):
         revision = self.revisions[id]
         if revision.get("deleted", False):
-            sys.stderr.write("Revision {0} was deleted\n".format(id))
+            sys.stderr.write("Ignored deleted version {0}\n".format(id))
             return
 
         if self.verbose:
-            sys.stderr.write("Converting revision {0}\n".format(id))
+            sys.stderr.write("Converting version {0}\n".format(id))
 
         descriptor = self.project.descriptor(id)
         parent = descriptor.parent()
