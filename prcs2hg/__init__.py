@@ -142,10 +142,10 @@ class Converter(object):
 
 def _makefilemap(files):
     filemap = {}
-    for name, i in files.iteritems():
-        id = i.get("id")
+    for name, file in files.iteritems():
+        id = file.get("id")
         if id is not None:
-            if filemap.has_key(id):
+            if filemap.get(id) is not None:
                 sys.stderr.write(
                     "warning: Duplicate file identifier in a revision\n")
             filemap[id] = name
