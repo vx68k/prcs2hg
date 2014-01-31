@@ -98,6 +98,10 @@ class PrcsDescriptor(object):
             sys.stderr.write("Failed to get the parent for {0}\n".format(id))
             return None
 
+    def message(self):
+        """Return the log message."""
+        return self.properties["Version-Log"][0]
+
     def files(self):
         """Return the file information as a dictionary."""
         files = {}
