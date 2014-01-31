@@ -39,8 +39,8 @@ class Converter(object):
         self.revisionmap = {}
         self.symlink_warned = {}
 
-        self.project = PrcsProject(self.name)
-        self.revisions = self.project.revisions()
+        self.prcs = PrcsProject(self.name)
+        self.revisions = self.prcs.revisions()
 
         self.hgclient = hglib.open(".")
 
@@ -60,7 +60,7 @@ class Converter(object):
         if self.verbose:
             sys.stderr.write("Converting version {0}\n".format(version))
 
-        descriptor = self.project.descriptor(version)
+        descriptor = self.prcs.descriptor(version)
         parent = descriptor.parentversion()
         if parent[0] is None:
             # It is a root revision.
@@ -88,10 +88,10 @@ class Converter(object):
             parent_filemap = self.revisions[parent].get("filemap")
             if parent_filemap is None:
                 sys.exit("No parent filemap")
-                parent_descriptor = self.project.descriptor(parent)
+                parent_descriptor = self.prcs.descriptor(parent)
                 parent_filemap = _makefilemap(parent_descriptor.files())
 
-        self.project.checkout(version)
+        self.prcs.checkout(version)
         files = descriptor.files()
         filemap = _makefilemap(files)
         self.revisions[version]["filemap"] = filemap
