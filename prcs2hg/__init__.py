@@ -36,6 +36,7 @@ class Converter(object):
         self.name = name
         self.verbose = verbose
         self.revisionmap = {}
+        self.symlink_warned = {}
 
         self.project = PrcsProject(self.name)
         self.revisions = self.project.revisions()
@@ -90,19 +91,20 @@ class Converter(object):
         filemap = _makefilemap(files)
         revision["filemap"] = filemap
 
-        # Checks for added files.
+        # Checks for files.
         addlist = []
-        for name, i in files.iteritems():
-            file_id = i.get("id")
-            if file_id is None:
-                if i.get("symlink", False):
+        for name, file in files.iteritems():
+            # We cannot include symbolic links in Mercurial repositories.
+            if "symlink" in file:
+                if not self.symlink_warned.get(name, False):
                     sys.stderr.write("{0}: warning: symbolic link\n"
                         .format(name))
-                else:
-                    sys.stderr.write("{0}: error: no identity\n"
-                        .format(name))
-                    sys.exit("stop")
+                    self.symlink_warned[name] = True
             else:
+                file_id = file.get("id")
+                if file_id is None:
+                    sys.exit("{0}: Missing file identity".format(name))
+
                 parent_name = parent_filemap.get(file_id)
                 if parent_name is not None and parent_name != name:
                     if self.verbose:
