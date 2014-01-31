@@ -23,9 +23,9 @@
 """provide command line interface to PRCS
 """
 
-import sys, re, os, subprocess, time, email.utils
+import sys, re, os, subprocess, email.utils
+from datetime import datetime
 from subprocess import Popen, PIPE
-from time import mktime
 from email.utils import parsedate
 import prcs.sexpdata as sexpdata
 
@@ -46,11 +46,12 @@ class PrcsProject(object):
             for line in out.splitlines():
                 m = self.info_re.search(line)
                 if (m):
+                    # The prcs info command always returns the local time.
+                    date = parsedate(m.group(3))
                     revisions[m.group(2)] = {
                         "project": m.group(1),
                         "id": m.group(2),
-                        # The prcs info command returns the local time.
-                        "date": mktime(parsedate(m.group(3))),
+                        "date": datetime(*date[0:6]),
                         "author": m.group(4),
                         "deleted": bool(m.group(5))
                     }
