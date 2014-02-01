@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Copyright (C) 2012-2013  Kaz Nishimura
+# Copyright (C) 2012-2014 Kaz Nishimura
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to
@@ -24,7 +24,7 @@
 from distutils.core import setup
 
 setup(name = 'prcs2hg',
-      version = '1.0x',
+      version = '1.0x1',
       author = 'Kaz Nishimura',
       author_email = 'kazssym@vx68k.org',
       url = 'https://bitbucket.org/kazssym/prcs2hg',
