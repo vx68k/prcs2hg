@@ -61,13 +61,16 @@ class Converter(object):
             sys.stderr.write("Converting version {0}\n".format(version))
 
         descriptor = self.prcs.descriptor(version)
-        parent = descriptor.parentversion()
-        if parent[0] is None:
+        parent_major, parent_minor = descriptor.parentversion()
+        if parent_major is None:
             # It is a root revision.
             self.hgclient.update("null")
             parent_filemap = {}
         else:
-            parent = join(parent, ".")
+            parent = "{0}.{1}".format(parent_major, parent_minor)
+            while self.revisions[parent].get("deleted"):
+                parent_minor = str(int(parent_minor) - 1)
+                parent = "{0}.{1}".format(parent_major, parent_minor)
             if self.revisionmap.get(parent) is None:
                 self.convertrevision(parent)
                 # TODO: If the parent is not converted, do it here.
