@@ -109,7 +109,8 @@ class PrcsDescriptor(object):
         """Return the list of merge parents."""
         p = []
         for i in self.properties["Merge-Parents"]:
-            p.append(i[0].value())
+            if i[1].value() == "complete":
+                p.append(i[0].value())
         return p
 
     def message(self):
