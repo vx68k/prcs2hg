@@ -1,0 +1,14 @@
+This file describes major changes and important notes for each release.
+
+# Version 1.0x1 (milestone 1.0x1)
+
+This release is the first milestone for the Python version of prcs2hg.
+
+## New feature
+
+* It now tries to record simple merges in the converted Mercurial history.
+
+## Known limitations
+
+* It cannot convert merges with multiple merge parents very well.
+* It may be confused by deleted versions.
