@@ -64,7 +64,7 @@ class PrcsProject(object):
     def descriptor(self, id = None):
         return PrcsDescriptor(self, id)
 
-    def checkout(self, revision = None, *files):
+    def checkout(self, revision = None, files = []):
         args = ["checkout", "-fqu"]
         if not files:
             args.append("-P")
@@ -86,7 +86,7 @@ class PrcsDescriptor(object):
 
     def __init__(self, project, id = None):
         prj_name = project.name + ".prj"
-        project.checkout(id, prj_name)
+        project.checkout(id, [prj_name])
         self.properties = _readdescriptor(prj_name)
         os.unlink(prj_name)
 
