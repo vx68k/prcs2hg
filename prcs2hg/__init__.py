@@ -74,22 +74,24 @@ class Converter(object):
                 sys.exit("Parent revision {0} not converted"
                     .format(parent))
 
-            mergeparents = descriptor.mergeparents()
-            if mergeparents:
-                sys.exit("Merge found")
-
-            # Makes the working directory clean.
             self.hgclient.update(self.revisionmap[parent])
-            for i in self.hgclient.status():
-                if i[0] != "C":
-                    os.unlink(i[1])
-            self.hgclient.revert([], "null", all = True)
 
             parent_filemap = self.revisions[parent].get("filemap")
             if parent_filemap is None:
                 sys.exit("No parent filemap")
                 parent_descriptor = self.prcs.descriptor(parent)
                 parent_filemap = _makefilemap(parent_descriptor.files())
+
+        # Handles merges.
+        mergeparents = descriptor.mergeparents()
+        if mergeparents:
+            self._handlemerge(mergeparents)
+
+        # Makes the working directory clean.
+        for i in self.hgclient.status():
+            if i[0] == "?":
+                os.unlink(i[1])
+        self.hgclient.revert([], "null", all = True)
 
         self.prcs.checkout(version)
         files = descriptor.files()
@@ -139,6 +141,16 @@ class Converter(object):
         self.revisionmap[version] = revision[1]
         # Keeps the revision identifier as a local tag for convenience.
         self.hgclient.tag([version], local = True, force = True)
+
+    def _handlemerge(self, mergeparents):
+        """Handle merges."""
+        if len(mergeparents) > 1:
+            sys.stderr.write("warning: multiple merge parents: {0}\n"
+                .format(join(mergeparents, ", ")))
+            sys.stderr.write("warning: picked {0} on record\n"
+                .format(mergeparents[-1]))
+        self.hgclient.merge(self.revisionmap[mergeparents[-1]],
+            tool = "internal:local", cb = hglib.merge.handlers.noninteractive)
 
 def _makefilemap(files):
     filemap = {}
