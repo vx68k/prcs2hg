@@ -1,0 +1,368 @@
+2014-02-01  Kaz Nishimura  <kazssym@vx68k.org>
+
+	* setup.py:
+	Updated the version number.
+	[1e83609b038a]
+
+	* prcs2hg/__init__.py:
+	Handle deleted parent version (see issue #6).
+	[f9d977367df9]
+
+	* prcs2hg/__init__.py:
+	Added merge handling code to fix issue #1.
+	[f952c9ef09e1]
+
+	* prcs/__init__.py:
+	Changed 'PrcsDescriptor.mergeparents' to return complete merge
+	parents only.
+	[8d2ada982ffb]
+
+	* prcs/__init__.py:
+	Changed the argument of 'PrcsProject.checkout'.
+	[724e5876fa12]
+
+2014-01-31  Kaz Nishimura  <kazssym@vx68k.org>
+
+	* prcs2hg/__init__.py:
+	Renamed 'Converter.project'.
+	[54d3217fec4a]
+
+	* prcs2hg/__init__.py:
+	Removed the use of has_key in '_makefilemap'.
+	[6ead0f0bcb5c]
+
+	* prcs/__init__.py:
+	Added 'PrcsDescriptor.mergeparents'.
+	[670a25e728c2]
+
+	* prcs2hg/__init__.py:
+	Added a check for merges.
+	[e175cb01b249]
+
+	* prcs/__init__.py, prcs2hg/__init__.py:
+	Removed a method from class PrcsDescriptor.
+	[56386bacaef4]
+
+	* prcs/__init__.py:
+	Added a new method to class PrcsDescriptor.
+	[fd85da6e4e6d]
+
+	* prcs2hg/__init__.py:
+	Modified messages.
+	[89ff9dd0a76e]
+
+	* prcs2hg/__init__.py:
+	Suppressed repeated symbolic link warnings for the same name.
+	[4ec38f3bdfb2]
+
+	* prcs2hg/__init__.py:
+	Change branches as major versions.
+	[bc09f2b64f5d]
+
+	* prcs2hg/__init__.py:
+	Removed unused code.
+	[987201c1af7c]
+
+	* prcs/__init__.py:
+	Added a new method to class PrcsDescriptor.
+	[8340d7662fe2]
+
+	* prcs2hg/__init__.py:
+	Implemented basic conversion.
+	[679305eaabad]
+
+	* prcs/__init__.py:
+	Changed the time of "date".
+	[d2f9938f0193]
+
+	* prcs/__init__.py:
+	Added a new method to class PrcsDescriptor.
+	[d84d06261237]
+
+2014-01-29  Kaz Nishimura  <kazssym@vx68k.org>
+
+	* prcs/__init__.py:
+	Changed the test condition for no files.
+	[ed59f500fb94]
+
+2014-01-28  Kaz Nishimura  <kazssym@vx68k.org>
+
+	* prcs/__init__.py:
+	Added a new method to class PrcsDescriptor.
+	[cd9ff4d9362b]
+
+	* prcs/__init__.py:
+	Changed the arguments of PrcsProject.checkout.
+	[f2514620ab3a]
+
+	* prcs2hg/__init__.py:
+	Used 'pass' for an empty clause.
+	[ae2b11e72f7b]
+
+2014-01-27  Kaz Nishimura  <kazssym@vx68k.org>
+
+	* prcs/__init__.py, prcs2hg/__init__.py:
+	Added a new class.
+	[a915ac7dbb38]
+
+	* prcs2hg/__init__.py:
+	Added a new method to class Converter.
+	[fbd593052604]
+
+2014-01-26  Kaz Nishimura  <kazssym@vx68k.org>
+
+	* scripts/prcs2hg:
+	Added a command line option.
+	[5fc259e886d4]
+
+	* prcs2hg/__init__.py:
+	Used string formatting for messages.
+	[56dc5aa861aa]
+
+	* prcs2hg/__init__.py:
+	Moved conversion code to class Converter.
+	[8204f99f6950]
+
+	* prcs2hg/__init__.py, prcs2hg/sexpdata.py:
+	Moved project descriptor parsing out of 'convert'.
+	[eeb3df1ca3a8]
+
+	* prcs/__init__.py:
+	Added a new method to class PrcsProject.
+	[dc03ba5f2b48]
+
+	* prcs/sexpdata.py:
+	Copied a file.
+	[55250297a575]
+
+2014-01-24  Kaz Nishimura  <kazssym@vx68k.org>
+
+	* setup.py:
+	Updated the packages list.
+	[9aa1b2552409]
+
+	* prcs/__init__.py, prcs2hg/__init__.py, prcs2hg/prcs.py:
+	Moved prcs2hg.prcs to a new package.
+	[83c951e1b499]
+
+	* prcs2hg/__init__.py:
+	Updated the copyright years.
+	[9539c653f437]
+
+	* prcs2hg/__init__.py:
+	Added a new class.
+	[2c73a034663c]
+
+	* prcs2hg/__init__.py:
+	Renamed a variable.
+	[bc36957a2cbb]
+
+	* prcs2hg/__init__.py:
+	Changed to use a sorted list for iteration.
+	[c8e4e6bc38b8]
+
+	* prcs2hg/__init__.py, prcs2hg/prcs.py:
+	Renamed dictionary key "revision" to "id".
+	[17862811b121]
+
+	* prcs2hg/prcs.py:
+	Updated the copyright years.
+	[527b548c6d6d]
+
+	* prcs2hg/prcs.py:
+	Fixed a typo error.
+	[936fd9fbebd3]
+
+2013-08-14  Kaz Nishimura  <kazssym@vx68k.org>
+
+	* prcs2hg/sexpdata.py:
+	Removed code to parse symbols as ints from the sexpdata Parser.
+	[8325d9418120]
+
+2013-07-13  Kaz Nishimura  <kazssym@vx68k.org>
+
+	* README:
+	Added a section for third-party components in the README file.
+	[c6ddf72ac72d]
+
+2013-07-10  Kaz Nishimura  <kazssym@vx68k.org>
+
+	* prcs2hg/__init__.py:
+	Added code to retrieve a root revision.
+	[a49b20c2633f]
+
+	* prcs2hg/__init__.py:
+	Modified the import list.
+	[e5fe7f8bb5a0]
+
+2013-07-07  Kaz Nishimura  <kazssym@vx68k.org>
+
+	* prcs2hg/__init__.py:
+	Switched to use the local copy of sexpdata.
+	[ba7eb3efd4cc] <feature/add-sexpdata>
+
+	* prcs2hg/sexpdata.py:
+	Removed code in sexpdata.py to parse tokens as float.
+	[e6a3651adfce] <feature/add-sexpdata>
+
+2013-07-07  Takafumi Arakaki  <aka.tkf@gmail.com>
+
+	* prcs2hg/sexpdata.py:
+	Added a local copy of sexpdata.py.
+	[f72000d8c2d4] <feature/add-sexpdata>
+
+2013-07-06  Kaz Nishimura  <kazssym@vx68k.org>
+
+	* prcs2hg/__init__.py:
+	Added new function _parsedescriptor() to get revision information
+	and used it.
+	[4bda298b3682]
+
+	* prcs2hg/__init__.py:
+	Modified convert().
+	[c05c05f4e86e]
+
+	* prcs2hg/prcs.py:
+	Revised checkout().
+	[7c6a69cdbbfb]
+
+2013-07-05  Kaz Nishimura  <kazssym@vx68k.org>
+
+	* prcs2hg/prcs.py:
+	Moved the default flags for checkout.
+	[3fa4023f253d]
+
+	* prcs2hg/__init__.py:
+	Added an iteration over revisions in convert().
+	[7b09e540bda4]
+
+	* prcs2hg/prcs.py:
+	Added new function checkout to PrcsProject.
+	[86cded204f86]
+
+2013-06-18  Kaz Nishimura  <kazssym@vx68k.org>
+
+	* prcs2hg/prcs.py:
+	Revised PrcsProject.revisions() to return all available information.
+	[0a863c002aa7]
+
+	* prcs2hg/__init__.py, prcs2hg/prcs.py:
+	Renamed class Project.
+	[3bd9ea753b5d]
+
+2013-06-17  Kaz Nishimura  <kazssym@vx68k.org>
+
+	* prcs2hg/prcs.py:
+	Folded a long line.
+	[b7ec8aba4a45]
+
+	* prcs2hg/prcs.py:
+	Modified the regular expression pattern.
+	[8c19999fec16]
+
+	* prcs2hg/__init__.py, prcs2hg/prcs.py:
+	Added new function revisions() to class Project.
+	[acc472d575d5]
+
+2013-06-09  Kaz Nishimura  <kazssym@vx68k.org>
+
+	* setup.py:
+	Changed the comment formatting slightly.
+	[436169a9f2e4] <python>
+
+2013-06-05  Kaz Nishimura  <kazssym@vx68k.org>
+
+	* README:
+	Modified the README text.
+	[0030fd28c65a] <python>
+
+	* scripts/prcs2hg:
+	Added the main code in the script.
+	[08ec791e806d] <python>
+
+	* prcs2hg/__init__.py:
+	Modified prcs2hg.convert() to use a Project object.
+	[a2e924a7fb02] <python>
+
+	* prcs2hg/prcs.py:
+	Added new class Project for PRCS.
+	[2cd7184f19f9] <python>
+
+2013-06-01  Kaz Nishimura  <kazssym@vx68k.org>
+
+	* prcs2hg/__init__.py:
+	Added new empty function convert() in module prcs2hg.
+	[20b62932b2a3] <python>
+
+2013-05-31  Kaz Nishimura  <kazssym@vx68k.org>
+
+	* README:
+	Created the README file.
+	[d9917c8bd70b] <python>
+
+	* Makefile.am:
+	Removed Makefile.am.
+	[a0eeeeb1e3ba] <python>
+
+2013-05-28  Kaz Nishimura  <kazssym@vx68k.org>
+
+	* configure.ac:
+	Removed configure.ac.
+	[dd81a15bba31] <python>
+
+	* scripts/prcs2hg:
+	Changed the interpreter spec in the script.
+	[5254e64e75a7] <python>
+
+	* setup.py:
+	Added the author info to the setup script.
+	[77bb0a59f2c7] <python>
+
+2013-05-28  Kaz Sasa  <kazssym@vx68k.org>
+
+	* setup.py:
+	Added the copyright notice for the setup script.
+	[5ad14a068f67] <python>
+
+2012-06-01  Kaz Sasa  <kazssym@vx68k.org>
+
+	* prcs2hg/__init__.py, prcs2hg/prcs.py, scripts/prcs2hg, setup.py:
+	Added a Python package.
+	[27c63d0548ee] <python>
+
+	* scripts/prcs2hg:
+	Added a command script.
+	[a8058703a858] <python>
+
+	* setup.py:
+	Added a setup script.
+	[babbbbf74b0a] <python>
+
+2010-08-17  Kaz Sasa  <kazssym@nifty.com>
+
+	* prcs2hg.pl:
+	Added a license to prcs2hg.pl.
+	[f31109090f24]
+
+2010-08-09  Kaz Sasa  <kazssym@nifty.com>
+
+	* Makefile.am:
+	Modified a make rule.
+	[10443a2ca552]
+
+	* COPYING, INSTALL:
+	These files will be added automatically.
+	[fda4a271478e]
+
+	* COPYING, INSTALL, Makefile.am, configure.ac, prcs2hg.pl:
+	Added autoconf/automake source files.
+	[e943c5b860d7]
+
+	* prcs2hg.pl:
+	Revised handling of version history.
+	[72ef0d9d7582]
+
+	* prcs2hg.pl:
+	Added experimental version.
+	[e39933d175a9]
+
