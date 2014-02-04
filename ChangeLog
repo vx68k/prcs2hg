@@ -1,4 +1,22 @@
+2014-02-04  Kaz Nishimura  <kazssym@vx68k.org>
+
+	* MANIFEST.in:
+	Updated MANIFEST.in to include itself.
+	[aa21fbaa3a3c] [tip] <release>
+
+	* README:
+	Updated the README file.
+	[67af0c7fc92c] <release>
+
 2014-02-01  Kaz Nishimura  <kazssym@vx68k.org>
+
+	* MANIFEST.in, NEWS:
+	Added the NEWS file.
+	[e14539188438] <release>
+
+	* ChangeLog:
+	Created the change log.
+	[5b4c321689a1] <release>
 
 	* setup.py:
 	Updated the version number.
