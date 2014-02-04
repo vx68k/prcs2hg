@@ -1,0 +1,3 @@
+# Template to produce a MANIFEST file.
+include MANIFEST.in
+include NEWS
