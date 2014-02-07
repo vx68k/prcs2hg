@@ -27,6 +27,6 @@ setup(name = 'prcs2hg',
       version = '1.0x2',
       author = 'Kaz Nishimura',
       author_email = 'kazssym@vx68k.org',
-      url = 'https://bitbucket.org/kazssym/prcs2hg',
+      url = 'http://www.vx68k.org/prcs2hg',
       packages = ['prcs2hg', 'prcs'],
       scripts = ['scripts/prcs2hg'])
