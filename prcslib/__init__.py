@@ -74,7 +74,7 @@ class PrcsProject(object):
                         "deleted": bool(m.group(5))
                     }
         else:
-            sys.stderr.write(err)
+            raise PrcsCommandError(err)
         return revisions
 
     def descriptor(self, id = None):
