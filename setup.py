@@ -24,7 +24,7 @@
 from distutils.core import setup
 
 setup(name = 'prcs2hg',
-      version = '1.1',
+      version = '2.0',
       author = 'Kaz Nishimura',
       author_email = 'kazssym@vx68k.org',
       url = 'http://www.vx68k.org/prcs2hg',
