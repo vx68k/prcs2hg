@@ -32,6 +32,21 @@ from email.utils import parsedate
 from subprocess import Popen, PIPE
 import prcslib.sexpdata as sexpdata
 
+class PrcsError(Exception):
+    """Base exception for this module."""
+
+class PrcsCommandError(PrcsError):
+    """Error from the PRCS command."""
+
+    def __init__(self, error_message):
+        """Construct a command error with an error message from PRCS."""
+        super(PrcsCommandError, self).__init__(self)
+        self._error_message = error_message
+
+    def error_message(self):
+        """Return the error message."""
+        return self._error_message
+
 class PrcsProject(object):
 
     def __init__(self, name):
