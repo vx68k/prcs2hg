@@ -1,5 +1,6 @@
 #
-# Copyright (C) 2012-2014 Kaz Nishimura
+# prcslib/__init__.py - command interface package for PRCS
+# Copyright (C) 2012-2015 Kaz Nishimura
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to
