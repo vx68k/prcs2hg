@@ -28,7 +28,7 @@ import re
 import os
 import hglib
 from string import join
-from prcs import PrcsProject
+from prcslib import PrcsProject
 
 class Converter(object):
 
