@@ -29,7 +29,7 @@ import os
 from datetime import datetime
 from email.utils import parsedate
 from subprocess import Popen, PIPE
-import prcs.sexpdata as sexpdata
+import prcslib.sexpdata as sexpdata
 
 class PrcsProject(object):
 
