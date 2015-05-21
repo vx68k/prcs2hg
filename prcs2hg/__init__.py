@@ -53,6 +53,8 @@ class Converter(object):
             self.convertrevision(i)
 
     def convertrevision(self, version):
+        version = str(version)
+
         if self.revisions[version].get("deleted"):
             sys.stderr.write("Ignored deleted version {0}\n".format(version))
             return
@@ -61,16 +63,16 @@ class Converter(object):
             sys.stderr.write("Converting version {0}\n".format(version))
 
         descriptor = self.prcs.descriptor(version)
-        parent_major, parent_minor = descriptor.parentversion()
-        if parent_major is None:
+        parent = descriptor.parentversion()
+        if parent is None:
             # It is a root revision.
             self.hgclient.update("null")
             parent_filemap = {}
         else:
-            parent = "{0}.{1}".format(parent_major, parent_minor)
-            while self.revisions[parent].get("deleted"):
-                parent_minor = str(int(parent_minor) - 1)
-                parent = "{0}.{1}".format(parent_major, parent_minor)
+            while self.revisions[str(parent)].get("deleted"):
+                parent.minor -= 1
+            parent = str(parent)
+
             if self.revisionmap.get(parent) is None:
                 self.convertrevision(parent)
                 # TODO: If the parent is not converted, do it here.
@@ -128,11 +130,12 @@ class Converter(object):
             self.hgclient.add(addlist)
 
         # Sets the branch for the following commit.
-        major, minor = descriptor.version()
+        version = descriptor.version()
         branch = "default"
-        if not re.match("[0-9]+$", major):
-            branch = major
+        if not re.match("[0-9]+$", version.major):
+            branch = version.major
         self.hgclient.branch(branch, force = True)
+        version = str(version)
 
         message = descriptor.message()
         if not message:

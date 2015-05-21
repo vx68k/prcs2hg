@@ -32,6 +32,9 @@ from email.utils import parsedate
 from subprocess import Popen, PIPE
 import prcslib.sexpdata as sexpdata
 
+# Regular expression pattern for splitting versions.
+_VERSION_RE = re.compile(r"^(.*)\.(\d+)$")
+
 class PrcsError(Exception):
     """Base exception for this module."""
     pass
@@ -43,6 +46,20 @@ class PrcsCommandError(PrcsError):
         """Construct a command error with an error message from PRCS."""
         super(PrcsCommandError, self).__init__(self)
         self.error_message = error_message
+
+class PrcsVersion(object):
+    """Version identifier of PRCS."""
+
+    def __init__(self, major, minor=None):
+        if minor is None:
+            m = _VERSION_RE.match(major)
+            major, minor = m.groups()
+
+        self.major = major
+        self.minor = int(minor)
+
+    def __str__(self):
+        return self.major + "." + str(self.minor)
 
 class PrcsProject(object):
 
@@ -104,9 +121,9 @@ class PrcsDescriptor(object):
         os.unlink(prj_name)
 
     def version(self):
-        """Return the major and minor versions."""
+        """Return the version in this descriptor."""
         v = self.properties["Project-Version"]
-        return v[1].value(), v[2].value()
+        return PrcsVersion(v[1].value(), v[2].value())
 
     def parentversion(self):
         """Return the major and minor parent versions."""
@@ -114,9 +131,8 @@ class PrcsDescriptor(object):
         major = v[1].value()
         minor = v[2].value()
         if v[0].value() == "-*-" and major == "-*-" and minor == "-*-":
-            major = None
-            minor = None
-        return major, minor
+            return None
+        return PrcsVersion(major, minor)
 
     def mergeparents(self):
         """Return the list of merge parents."""
